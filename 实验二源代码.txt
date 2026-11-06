@@ -1,0 +1,247 @@
+#ifndef CARD_OPERATIONS_H
+#define CARD_OPERATIONS_H
+#include <iostream>
+#include <string>
+#include <iomanip>
+using namespace std;
+
+const double FEE_RATE = 0.02;
+const double WARNING_BALANCE = 10.0;
+
+struct Card
+{
+    int id;
+    string name;
+    double balance;
+    int transactions;
+};
+
+namespace card
+{
+    void printLine(char c = '-', int len = 60);
+    void title(const string &s);
+}
+
+Card* createCards(int n);
+void destroyCards(Card *p);
+void inputCards(Card *arr, int n);
+
+void deposit(Card &c, double amount, double rate = FEE_RATE);
+bool spend(Card &c, double cost);
+bool spend(Card &c, double cost, const string &item);
+
+void showBalance(const Card &c);
+void viewStudentID(const Card *p);
+
+int toCent(double amount);
+void printReport(const Card *arr, int n);
+
+#endif
+
+#include "card_operations.h"
+
+namespace card
+{
+    void printLine(char c, int len)
+    {
+        for(int i = 0; i < len; i++)
+            cout << c;
+        cout << endl;
+    }
+    void title(const string &s)
+    {
+        printLine('=');
+        cout << "        " << s << endl;
+        printLine('=');
+    }
+}
+
+Card* createCards(int n)
+{
+    if(n <= 0)
+        throw runtime_error("账户数量不能小于等于0");
+    Card* p = new Card[n];
+    return p;
+}
+
+void destroyCards(Card *p)
+{
+    delete[] p;
+}
+
+void inputCards(Card *arr, int n)
+{
+    for(int i = 0; i < n; i++)
+    {
+        cout << "请输入第" << i+1 << "个账户：学号 姓名 初始余额：";
+        cin >> arr[i].id >> arr[i].name >> arr[i].balance;
+        if(arr[i].balance < 0)
+            throw runtime_error("余额不能为负数！");
+        arr[i].transactions = 0;
+    }
+}
+
+void deposit(Card &c, double amount, double rate)
+{
+    if(amount <= 0)
+        throw runtime_error("充值金额必须大于0");
+    double fee = amount * rate;
+    c.balance = c.balance + amount - fee;
+    c.transactions++;
+}
+
+bool spend(Card &c, double cost)
+{
+    if(cost <= 0)
+        throw runtime_error("消费金额必须大于0");
+    if(c.balance < cost)
+        return false;
+    c.balance -= cost;
+    c.transactions++;
+    return true;
+}
+
+bool spend(Card &c, double cost, const string &item)
+{
+    cout << "消费项目：" << item << endl;
+    return spend(c, cost);
+}
+
+void showBalance(const Card &c)
+{
+    cout << "账户余额：" << fixed << setprecision(2) << c.balance << endl;
+}
+
+void viewStudentID(const Card *p)
+{
+    cout << "学号ID：" << p->id << endl;
+}
+
+int toCent(double amount)
+{
+    return static_cast<int>(amount * 100);
+}
+
+void printReport(const Card *arr, int n)
+{
+    card::printLine();
+    cout << left << setw(10) << "ID"
+         << setw(15) << "Name"
+         << setw(12) << "Balance"
+         << setw(12) << "Transactions" << endl;
+    card::printLine();
+    cout << fixed << setprecision(2);
+    for(int i = 0; i < n; i++)
+    {
+        cout << left << setw(10) << arr[i].id
+             << setw(15) << arr[i].name
+             << setw(12) << arr[i].balance
+             << setw(12) << arr[i].transactions << endl;
+    }
+    card::printLine();
+}
+
+
+#include "card_operations.h"
+
+namespace card
+{
+    void printLine(char c, int len)
+    {
+        for(int i = 0; i < len; i++)
+            cout << c;
+        cout << endl;
+    }
+    void title(const string &s)
+    {
+        printLine('=');
+        cout << "        " << s << endl;
+        printLine('=');
+    }
+}
+
+Card* createCards(int n)
+{
+    if(n <= 0)
+        throw runtime_error("账户数量不能小于等于0");
+    Card* p = new Card[n];
+    return p;
+}
+
+void destroyCards(Card *p)
+{
+    delete[] p;
+}
+
+void inputCards(Card *arr, int n)
+{
+    for(int i = 0; i < n; i++)
+    {
+        cout << "请输入第" << i+1 << "个账户：学号 姓名 初始余额：";
+        cin >> arr[i].id >> arr[i].name >> arr[i].balance;
+        if(arr[i].balance < 0)
+            throw runtime_error("余额不能为负数！");
+        arr[i].transactions = 0;
+    }
+}
+
+void deposit(Card &c, double amount, double rate)
+{
+    if(amount <= 0)
+        throw runtime_error("充值金额必须大于0");
+    double fee = amount * rate;
+    c.balance = c.balance + amount - fee;
+    c.transactions++;
+}
+
+bool spend(Card &c, double cost)
+{
+    if(cost <= 0)
+        throw runtime_error("消费金额必须大于0");
+    if(c.balance < cost)
+        return false;
+    c.balance -= cost;
+    c.transactions++;
+    return true;
+}
+
+bool spend(Card &c, double cost, const string &item)
+{
+    cout << "消费项目：" << item << endl;
+    return spend(c, cost);
+}
+
+void showBalance(const Card &c)
+{
+    cout << "账户余额：" << fixed << setprecision(2) << c.balance << endl;
+}
+
+void viewStudentID(const Card *p)
+{
+    cout << "学号ID：" << p->id << endl;
+}
+
+int toCent(double amount)
+{
+    return static_cast<int>(amount * 100);
+}
+
+void printReport(const Card *arr, int n)
+{
+    card::printLine();
+    cout << left << setw(10) << "ID"
+         << setw(15) << "Name"
+         << setw(12) << "Balance"
+         << setw(12) << "Transactions" << endl;
+    card::printLine();
+    cout << fixed << setprecision(2);
+    for(int i = 0; i < n; i++)
+    {
+        cout << left << setw(10) << arr[i].id
+             << setw(15) << arr[i].name
+             << setw(12) << arr[i].balance
+             << setw(12) << arr[i].transactions << endl;
+    }
+    card::printLine();
+}
+
